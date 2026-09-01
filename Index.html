@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday!</title>
+  <!-- Tailwind CSS & Canvas Confetti -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+    .balloon {
+      animation: float 3s ease-in-out infinite;
+      cursor: pointer;
+    }
+    .fade-in {
+      animation: fadeIn 2s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-indigo-900 via-purple-800 to-pink-800 min-h-screen text-white font-sans overflow-x-hidden">
+
+  <!-- Soft Background Audio -->
+  <audio id="bg-music" loop>
+    <source src="https://assets.mixkit.co/music/preview/mixkit-peaceful-piano-109.mp3" type="audio/mp3">
+  </audio>
+
+  <!-- Step 1: Sukoon Bhari Entry Screen -->
+  <div id="step-1" class="flex flex-col items-center justify-center min-h-screen p-4 text-center">
+    <h1 class="text-3xl md:text-5xl font-serif tracking-wide mb-6 fade-in">Aapke Is Khaas Din Par... ✨</h1>
+    <p class="text-lg opacity-80 mb-8 fade-in">Aankhein band karein aur ek pyari si smile ke saath tap karein</p>
+    <button onclick="startExperience()" class="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg transform transition active:scale-95">
+      Open Wish ❤️
+    </button>
+  </div>
+
+  <!-- Interactive Area (Balloons, Scene, Photos) -->
+  <div id="interactive-area" class="hidden min-h-screen flex flex-col items-center justify-between p-4 relative">
+    
+    <!-- Tap to Pop Balloons Layer -->
+    <div id="balloon-container" class="absolute inset-0 pointer-events-none flex justify-around items-start pt-10">
+      <div class="balloon pointer-events-auto text-5xl" onclick="popBalloon(this)">🎈</div>
+      <div class="balloon pointer-events-auto text-5xl" style="animation-delay: 1s;" onclick="popBalloon(this)">🎈</div>
+      <div class="balloon pointer-events-auto text-5xl" style="animation-delay: 0.5s;" onclick="popBalloon(this)">🎈</div>
+      <div class="balloon pointer-events-auto text-5xl" style="animation-delay: 1.5s;" onclick="popBalloon(this)">🎈</div>
+    </div>
+
+    <!-- Cartoon & Cake Stage -->
+    <div id="stage" class="text-center mt-12 z-10">
+      <div id="character" class="text-7xl mb-4 transition-all duration-1000">🧸</div>
+      <div id="cake" class="text-6xl relative inline-block">
+        🎂
+        <span id="candle-flame" class="absolute -top-4 left-1/2 -translate-x-1/2 text-2xl animate-pulse">🔥</span>
+      </div>
+      <p id="dialogue" class="mt-4 text-xl font-medium bg-black/40 backdrop-blur-md px-6 py-2 rounded-full border border-white/20">
+        Cute Bear table ke paas aa raha hai...
+      </p>
+    </div>
+
+    <!-- Step 2: 5 Memories Gallery -->
+    <div id="memories-section" class="hidden w-full max-w-md my-8 z-10">
+      <h2 class="text-center text-2xl font-serif mb-4">Pyaari Yaadein ✨</h2>
+      <div class="flex overflow-x-auto space-x-4 p-2 scrollbar-none">
+        <img src="photo1.jpg" class="w-48 h-64 object-cover rounded-xl shadow-2xl border-2 border-white/30 flex-shrink-0" alt="Memory 1">
+        <img src="photo2.jpg" class="w-48 h-64 object-cover rounded-xl shadow-2xl border-2 border-white/30 flex-shrink-0" alt="Memory 2">
+        <img src="photo3.jpg" class="w-48 h-64 object-cover rounded-xl shadow-2xl border-2 border-white/30 flex-shrink-0" alt="Memory 3">
+        <img src="photo4.jpg" class="w-48 h-64 object-cover rounded-xl shadow-2xl border-2 border-white/30 flex-shrink-0" alt="Memory 4">
+        <img src="photo5.jpg" class="w-48 h-64 object-cover rounded-xl shadow-2xl border-2 border-white/30 flex-shrink-0" alt="Memory 5">
+      </div>
+    </div>
+
+    <!-- Step 3: Surprise Box Area -->
+    <div id="gift-area" class="hidden flex flex-col items-center z-10 mb-8">
+      <div id="gift-box" class="text-7xl cursor-pointer transform transition hover:scale-110" onclick="openGift()">🎁</div>
+      <p id="gift-text" class="text-sm mt-2 opacity-80">Gift Box par tap karke kholein!</p>
+    </div>
+
+  </div>
+
+  <script>
+    const music = document.getElementById('bg-music');
+
+    function startExperience() {
+      document.getElementById('step-1').classList.add('hidden');
+      document.getElementById('interactive-area').classList.remove('hidden');
+      music.play().catch(() => {});
+      
+      // Step 1 Flow: Character Candle bujhata hai
+      setTimeout(() => {
+        document.getElementById('dialogue').innerText = "💨 Bear ne candle bujha di!";
+        document.getElementById('candle-flame').style.display = 'none';
+        
+        setTimeout(() => {
+          document.getElementById('dialogue').innerText = "🎉 Happy Birthday!! AAP JIO HAZARO SAAL!";
+          confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+          
+          // Step 2 Flow: Memories dikhana
+          setTimeout(() => {
+            document.getElementById('memories-section').classList.remove('hidden');
+            document.getElementById('dialogue').innerText = "In khoobsurat yaadon ko dekhiye... ❤️";
+            
+            // Step 3 Flow: Surprise Box Dhakka marke lana
+            setTimeout(() => {
+              document.getElementById('gift-area').classList.remove('hidden');
+              document.getElementById('character').innerText = "🧸📦"; // Push animation representation
+              document.getElementById('dialogue').innerText = "Arey dekho! Bear dhakka marke aapke liye gift box laaya hai! 🎁";
+            }, 6000);
+
+          }, 3000);
+
+        }, 1500);
+      }, 2500);
+    }
+
+    // Balloon Burst Sound and Effect
+    function popBalloon(element) {
+      confetti({ particleCount: 30, spread: 50, origin: { x: element.getBoundingClientRect().left / window.innerWidth, y: element.getBoundingClientRect().top / window.innerHeight } });
+      element.style.visibility = 'hidden';
+    }
+
+    // Gift Box Open
+    function openGift() {
+      confetti({ particleCount: 200, spread: 100 });
+      document.getElementById('gift-box').innerText = "👑✨";
+      document.getElementById('gift-text').innerText = "Aap humare liye sabse bada gift ho! Stay Blessed Always!";
+    }
+  </script>
+</body>
+</html>
